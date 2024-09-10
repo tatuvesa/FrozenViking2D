@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MapCharacter : MonoBehaviour
 {
@@ -18,4 +19,13 @@ public class MapCharacter : MonoBehaviour
         float verticalMove = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         transform.Translate(horizontalMove, verticalMove, 0);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "LevelTrigger")
+        {
+            SceneManager.LoadScene("Level1");
+        }
+    }
 }
+
