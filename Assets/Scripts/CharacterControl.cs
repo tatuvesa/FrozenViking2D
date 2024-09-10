@@ -1,4 +1,6 @@
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CharacterControl : MonoBehaviour
@@ -105,6 +107,10 @@ public class CharacterControl : MonoBehaviour
         {
             Destroy(collision.gameObject);
             AddMaxHealth(50);
+        }
+        if (collision.gameObject.CompareTag("LevelEnd"))
+        {
+            SceneManager.LoadScene("Map");
         }
     }
     void AddMaxHealth(float amt)
