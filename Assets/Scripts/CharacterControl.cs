@@ -18,14 +18,8 @@ public class CharacterControl : MonoBehaviour
     public bool isGrounded; // Onko hahmo maassa
 
     public Image filler; // Täynnä kun hahmo ei ole ottanut damagea
-    public float Health; // Hahmon health
-    public float previousHealth; // Hahmon edellinen health
-    public float maxHealth; // Hahmon maksimi health
-
     public float counter; // Laskee nollasta kahteen ja alottaa alusta
     public float maxCounter; // Counterin nopeus
-
-
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -74,7 +68,7 @@ public class CharacterControl : MonoBehaviour
 
         if (counter > maxCounter)
         {
-            previousHealth = Health;
+            GameManager.manager.previousHealth = GameManager.manager.Health;
             counter = 0;
         }
         else
@@ -82,7 +76,7 @@ public class CharacterControl : MonoBehaviour
             counter += Time.deltaTime;
         }
 
-        filler.fillAmount = Mathf.Lerp(previousHealth / maxHealth, Health / maxHealth, counter / maxCounter);
+        filler.fillAmount = Mathf.Lerp(GameManager.manager.previousHealth / GameManager.manager.maxHealth, GameManager.manager.Health / GameManager.manager.maxHealth, counter / maxCounter);
 
     } // Update ends
 
@@ -115,24 +109,24 @@ public class CharacterControl : MonoBehaviour
     }
     void AddMaxHealth(float amt)
     {
-        maxHealth += amt;
+        GameManager.manager.maxHealth += amt;
     }
 
     void Heal(float amt)
     {
-        previousHealth = filler.fillAmount * maxHealth;
+        GameManager.manager.previousHealth = filler.fillAmount * GameManager.manager.maxHealth;
         counter = 0;
-        Health += amt;
-        if (Health > maxHealth)
+        GameManager.manager.Health += amt;
+        if (GameManager.manager.Health > GameManager.manager.maxHealth)
         {
-            Health = maxHealth;
+            GameManager.manager.Health = GameManager.manager.maxHealth;
         }
     }
 
     void TakeDamage(float dmg)
     {
-        previousHealth = filler.fillAmount * maxHealth;
+        GameManager.manager.previousHealth = filler.fillAmount * GameManager.manager.maxHealth;
         counter = 0;
-        Health -= dmg;
+        GameManager.manager.Health -= dmg;
     }
 }

@@ -255,6 +255,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e754b2af8a0eceb45adcb5bf3c226056, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentLevel: 
+  Health: 200
+  previousHealth: 200
+  maxHealth: 200
 --- !u!1 &480042584
 GameObject:
   m_ObjectHideFlags: 0

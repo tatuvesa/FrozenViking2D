@@ -8,6 +8,10 @@ public class GameManager : MonoBehaviour
 
     public string currentLevel;
 
+    public float Health; // Hahmon health
+    public float previousHealth; // Hahmon edellinen health
+    public float maxHealth; // Hahmon maksimi health
+
     private void Awake()
     {
 
