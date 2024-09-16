@@ -8,6 +8,9 @@ public class CharacterControl : MonoBehaviour
 
     public float moveSpeed;
     public float jumpForce;
+    public GameObject axePrefab; // T‰m‰ on prefab, joka on asetettu Unityss‰
+    public Transform throwPoint; // T‰m‰ on tyhj‰ GameObject, joka on asetettu Unityss‰
+    public float throwForce; // T‰m‰ on heittovoima
 
     public Animator animator; // Animaattori animaatioille 
     public Rigidbody2D rb2D; // T‰ll‰ laitetaan hahmo hypp‰‰m‰‰n
@@ -20,6 +23,8 @@ public class CharacterControl : MonoBehaviour
     public Image filler; // T‰ynn‰ kun hahmo ei ole ottanut damagea
     public float counter; // Laskee nollasta kahteen ja alottaa alusta
     public float maxCounter; // Counterin nopeus
+
+    public bool isInFireHeal; // Onko hahmo tulen p‰‰ll‰
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -78,6 +83,17 @@ public class CharacterControl : MonoBehaviour
 
         filler.fillAmount = Mathf.Lerp(GameManager.manager.previousHealth / GameManager.manager.maxHealth, GameManager.manager.Health / GameManager.manager.maxHealth, counter / maxCounter);
 
+        // check if player is in fireheal trigger and holding F
+        if (isInFireHeal && Input.GetKey(KeyCode.F))
+        {
+            Heal(1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.T)) // Heitt‰‰ kirveen
+        {
+            ThrowAxe();
+        }
+
     } // Update ends
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -100,13 +116,27 @@ public class CharacterControl : MonoBehaviour
         if (collision.gameObject.CompareTag("AddMaxHealth"))
         {
             Destroy(collision.gameObject);
-            AddMaxHealth(50);
+            AddMaxHealth(20);
         }
+
         if (collision.gameObject.CompareTag("LevelEnd"))
         {
             SceneManager.LoadScene("Map");
         }
+
+        if (collision.gameObject.CompareTag("FireHeal"))
+        {
+            isInFireHeal = true;
+        }
     }
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("FireHeal"))
+        {
+            isInFireHeal = false;
+        }
+    }
+
     void AddMaxHealth(float amt)
     {
         GameManager.manager.maxHealth += amt;
@@ -128,5 +158,12 @@ public class CharacterControl : MonoBehaviour
         GameManager.manager.previousHealth = filler.fillAmount * GameManager.manager.maxHealth;
         counter = 0;
         GameManager.manager.Health -= dmg;
+    }
+
+    void ThrowAxe()
+    {
+        GameObject axe = Instantiate(axePrefab, throwPoint.position, throwPoint.rotation);
+        Rigidbody2D rb = axe.GetComponent<Rigidbody2D>();
+        rb.AddForce(throwPoint.right * throwForce, ForceMode2D.Impulse);
     }
 }

@@ -9,6 +9,7 @@ TagManager:
   - AddMaxHealth
   - LevelTrigger
   - LevelEnd
+  - FireHeal
   layers:
   - Default
   - TransparentFX
